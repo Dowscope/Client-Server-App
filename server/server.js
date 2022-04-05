@@ -1,7 +1,20 @@
-const io = require('socket.io')()
+const http = require('http')
+const server = require('socket.io')
+const httpServer = http.createServer();
+const io = new server.Server(httpServer, {
+  cors: {
+    origin: "*",
+    allowedHeaders: true
+  }
+});
 
-io.on('Connection', (client) => {
-  client.emit('init', { data: 'Hellow From Server' })
+io.on('connection', (socket) => {
+  console.log(socket.id)
 })
 
-io.listen(53002)
+httpServer.listen(53002, () => {
+  console.log('Listening on PORT 53002...');
+})
+
+
+

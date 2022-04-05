@@ -1,12 +1,7 @@
-const { express } = require('express')
-const app = express()
-const host = 'localhost'
-const port = 53002
+const io = require('socket.io')()
 
-const http = require('http').Server(app)
-
-const io = require('socket.io')(http, {
-    cors: {
-        origin: '*',
-    }
+io.on('Connection', (client) => {
+  client.emit('init', { data: 'Hellow From Server' })
 })
+
+io.listen(53002)

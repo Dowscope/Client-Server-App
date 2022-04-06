@@ -1,5 +1,9 @@
 
-const Socket = io('localhost:53002')
-Socket.on('connection', (socket) => {
-  document.body.innerHTML(socket.id)
+const socket = io('localhost:53002')
+socket.on('connect', () => {
+})
+
+socket.emit('hello', {
+  ID: socket.id,
+  name: 'Client'
 })

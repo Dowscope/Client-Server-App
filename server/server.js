@@ -1,5 +1,5 @@
 const http = require('http')
-const server = require('socket.io')
+const server = require('socket.io');
 const httpServer = http.createServer();
 const io = new server.Server(httpServer, {
   cors: {
@@ -8,9 +8,24 @@ const io = new server.Server(httpServer, {
   }
 });
 
+
+
+var connectedUsers = []
+
 io.on('connection', (socket) => {
-  console.log(socket.id)
+  console.log('Connection by: ' + socket.address)
+  socket.on('hello', (arg) => {
+    connectedUsers.forEach( u => {
+      if (u.ID == arg.ID){
+        delete u
+      }
+    })
+    connectedUsers.push(arg)
+    console.log('User ' + arg.name + ' has been added.')
+  })
+  console.log(connectedUsers)
 })
+
 
 httpServer.listen(53002, () => {
   console.log('Listening on PORT 53002...');

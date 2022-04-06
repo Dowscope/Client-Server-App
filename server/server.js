@@ -8,28 +8,33 @@ const io = new server.Server(httpServer, {
   }
 });
 
-
-
-var connectedUsers = []
-
 io.on('connection', (socket) => {
-  console.log('Connection by: ' + socket.address)
+  console.log('Connection by: ' + socket.handshake.address)
   socket.on('hello', (arg) => {
-    connectedUsers.forEach( u => {
-      if (u.ID == arg.ID){
-        delete u
-      }
-    })
-    connectedUsers.push(arg)
     console.log('User ' + arg.name + ' has been added.')
+    socket.data = arg
   })
-  console.log(connectedUsers)
+  socket.on('show', () => {
+    cleanup()
+  })
+  socket.on('drop', () => {
+    drop()
+  })
 })
+
 
 
 httpServer.listen(53002, () => {
   console.log('Listening on PORT 53002...');
 })
 
+async function cleanup() {
+  const sockets = await io.fetchSockets()
+  for (const socket in sockets) {
+    console.log('1 ' + sockets[socket].data.name)
+  }
+}
 
-
+function drop() {
+  
+}
